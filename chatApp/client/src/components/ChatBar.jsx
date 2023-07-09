@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
-import {useState,useEffect} from 'react';
+import { useState, useEffect } from "react";
 
-const ChatBar = ({socket}) => {
-  const [users, setUsers] = useState([])
+const ChatBar = ({ socket }) => {
+  const [users, setUsers] = useState([]);
+  
   useEffect(() => {
-    socket.on('newUserResponse', (data) => setUsers(data));
+    socket.on("newUserResponse", (data) => setUsers(data));
+    
   }, [socket, users]);
   return (
     <div className="chat__sidebar">
@@ -13,8 +15,13 @@ const ChatBar = ({socket}) => {
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
-        {users.map((user) => (
-            <p key={user.socketID}>{user.userName}</p>
+          {users.map((user) => (
+            <p style={{cursor:'pointer'}}
+              key={user.socketID}
+              onClick={() => localStorage.setItem("receiver",user.socketID)}
+            >
+              {user.userName} 
+            </p>
           ))}
         </div>
       </div>
