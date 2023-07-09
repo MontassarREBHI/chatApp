@@ -3,7 +3,7 @@ import  { useState } from 'react';
 
 const ChatFooter = ({socket,setTypingStatus}) => {
   const [message, setMessage] = useState('');
-
+  
   const handleTyping = () =>
   socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
 
@@ -15,6 +15,7 @@ const ChatFooter = ({socket,setTypingStatus}) => {
         name: localStorage.getItem('userName'),
         id: `${socket.id}${Math.random()}`,
         socketID: socket.id,
+        socketReceiver:localStorage.getItem("receiver")
       });
     }
     setMessage('');

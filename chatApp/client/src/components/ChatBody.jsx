@@ -7,6 +7,7 @@ const ChatBody = ({messages,lastMessageRef,typingStatus}) => {
 
   const handleLeaveChat = () => {
     localStorage.removeItem('userName');
+    
     navigate('/');
     window.location.reload();
   };
@@ -14,7 +15,7 @@ const ChatBody = ({messages,lastMessageRef,typingStatus}) => {
   return (
     <>
       <header className="chat__mainHeader">
-        <p>Hangout with Colleagues</p>
+        <p>Hangout with Colleagues </p>
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
           LEAVE CHAT
         </button>
