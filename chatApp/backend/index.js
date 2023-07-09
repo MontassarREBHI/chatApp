@@ -23,14 +23,15 @@ io.on('connection', (socket) => {
     socket.on("newUser",(data)=>{
       users.push(data)
       io.emit('newUserResponse', users)})
+      socket.on('typing', (data) => socket.broadcast.emit('typingResponse', data));
     socket.on('disconnect', () => {
       console.log('🔥: A user disconnected');
        //Updates the list of users when a user disconnects from the server
-    users = users.filter((user) => user.socketID !== socket.id);
+      users = users.filter((user) => user.socketID !== socket.id);
     // console.log(users);
     //Sends the list of users to the client
-    io.emit('newUserResponse', users);
-    socket.disconnect();
+     io.emit('newUserResponse', users);
+     socket.disconnect();
     });
   }
   
