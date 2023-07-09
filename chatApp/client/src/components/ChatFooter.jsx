@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
 import  { useState } from 'react';
 
-const ChatFooter = ({socket}) => {
+const ChatFooter = ({socket,setTypingStatus}) => {
   const [message, setMessage] = useState('');
+
+  const handleTyping = () =>
+  socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -25,6 +28,8 @@ const ChatFooter = ({socket}) => {
           className="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleTyping}
+          onKeyUp={()=>setTypingStatus("")}
         />
         <button className="sendBtn">SEND</button>
       </form>
