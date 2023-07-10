@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
-import  { useState } from 'react';
+import  { useState,useEffect } from 'react';
+import checkPageStatus from "../utils/functions"
 
 const ChatFooter = ({socket,setTypingStatus}) => {
   const [message, setMessage] = useState('');
-  
+  useEffect(()=>{
+    checkPageStatus(message, localStorage.getItem("userName"));
+  },[message])
   const handleTyping = () =>
   socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
 
@@ -16,7 +19,8 @@ const ChatFooter = ({socket,setTypingStatus}) => {
         id: `${socket.id}${Math.random()}`,
         socketID: socket.id,
         socketReceiver:localStorage.getItem("receiver")
-      });
+      })
+      checkPageStatus(message, localStorage.getItem("userName"));
     }
     setMessage('');
   };
