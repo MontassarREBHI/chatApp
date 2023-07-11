@@ -4,6 +4,7 @@ import checkPageStatus from "../utils/functions"
 
 const ChatFooter = ({socket,setTypingStatus}) => {
   const [message, setMessage] = useState('');
+  
   useEffect(()=>{
     checkPageStatus(message, localStorage.getItem("userName"));
   },[message])
