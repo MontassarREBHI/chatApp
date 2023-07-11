@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 
-const ChatBar = ({ socket }) => {
+const ChatBar = ({ socket ,notification}) => {
   const [users, setUsers] = useState([]);
+  
   
   useEffect(() => {
     socket.on("newUserResponse", (data) => setUsers(data));
@@ -20,7 +21,7 @@ const ChatBar = ({ socket }) => {
               key={user.socketID}
               onClick={() => localStorage.setItem("receiver",user.socketID)}
             >
-              {user.userName} 
+              {user.userName}:::{notification.find(e=>e.name === user.userName)?.count } 
             </p>
           ))}
         </div>
