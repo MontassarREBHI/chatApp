@@ -1,5 +1,7 @@
 const express = require("express");
+const connectDB= require('./db')
 const app = express();
+connectDB();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
