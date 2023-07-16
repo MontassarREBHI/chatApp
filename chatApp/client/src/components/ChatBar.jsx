@@ -8,9 +8,8 @@ const ChatBar = ({ socket ,notification}) => {
   useEffect(() => {
     socket.on("newUserResponse", (data) =>{
       
-      setUsers(data)} );
-    
-  }, [socket, users]);
+      setUsers(data)} ); 
+  }, [socket]);
   return (
     <div className="chat__sidebar">
       <h2>Open Chat</h2>
@@ -21,7 +20,7 @@ const ChatBar = ({ socket ,notification}) => {
           {users?.map((user) => (
             <p style={{cursor:'pointer'}}
               key={user.socketId}
-              onClick={() => localStorage.setItem("receiver",user.socketID)}
+              onClick={() => localStorage.setItem("receiver",user.socketId)}
             >
               {user.username}::{notification.find(e=>e.name === user.username)?.count } 
             </p>
