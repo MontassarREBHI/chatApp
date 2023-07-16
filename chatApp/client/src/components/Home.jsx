@@ -9,7 +9,7 @@ const Home = ({socket}) => {
   const handleSubmit =  (e) => {
     e.preventDefault();
     localStorage.setItem('userName', userName);
-     axios.post('http://localhost:3000/login',{username:userName,socketId:socket.id})
+     axios.put('http://localhost:3000/login',{username:userName,socketId:socket.id})
     socket.emit('newUser', { userName, socketID: socket.id });
     navigate('/chat');
   };

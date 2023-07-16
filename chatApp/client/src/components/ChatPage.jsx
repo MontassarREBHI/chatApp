@@ -11,6 +11,7 @@ const ChatPage = ({ socket }) => {
   const lastMessageRef = useRef(null);
   useEffect(() => {
     socket.on('messageResponse', (data) => {
+      console.log(data)
       setMessages([...messages, data])
       setNotification(prevNotifications => {
         const sender = prevNotifications.find(e => e.name === data.name);
@@ -27,7 +28,7 @@ const ChatPage = ({ socket }) => {
         }
       });
       })
-  }, [messages.length,socket]);
+  }, [messages,socket]);
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -35,7 +36,7 @@ const ChatPage = ({ socket }) => {
   useEffect(() => {
     socket.on('typingResponse', (data) => setTypingStatus(data));
   }, [socket]);
-  console.log(notification)
+  
   return (
     <div className="chat">
       <ChatBar  socket={socket} notification={notification}/>

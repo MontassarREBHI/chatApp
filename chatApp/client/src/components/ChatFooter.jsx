@@ -14,13 +14,15 @@ const ChatFooter = ({socket,setTypingStatus}) => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (message.trim() && localStorage.getItem('userName')) {
-      socket.emit('message', {
+      const data={
         text: message,
         name: localStorage.getItem('userName'),
         id: `${socket.id}${Math.random()}`,
-        socketID: socket.id,
+        socketId: socket.id,
         socketReceiver:localStorage.getItem("receiver")
-      })
+      }
+      socket.emit('message', data)
+      
       checkPageStatus(message, localStorage.getItem("userName"));
     }
     setMessage('');

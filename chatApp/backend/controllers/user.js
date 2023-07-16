@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 const createUser = async (req, res) => {
   const { username, socketId } = req.body;
-  const user = await User.findOne({ username });
+  const user = await User.findOneAndUpdate({ username },{socketId},{new:true});
   if (user) return res.status(200).send("user already exisit");
   else {
     const newUser = new User({ username, socketId,connected:true });
