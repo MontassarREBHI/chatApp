@@ -59,7 +59,7 @@ io.on("connection", async (socket) => {
   socket.on("message", (data) => {
     console.log(data.socketReceiver);
     data.socketReceiver
-      ? io.to(data.socketReceiver).emit("messageResponse", data)
+      ? io.to(data.socketReceiver).emit("messageResponse", data) 
       : io.emit("messageResponse", data);
   });
 
