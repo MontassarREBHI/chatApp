@@ -6,25 +6,30 @@ const ChatBody = ({
   messages,
   lastMessageRef,
   typingStatus,
-  socket,
+  
   receiver,
 }) => {
   const navigate = useNavigate();
   const [discussion, setDiscussion] = useState([]);
   const handleLeaveChat = () => {
     localStorage.removeItem("userName");
+    localStorage.removeItem("receiverName");
     localStorage.removeItem("receiver");
     navigate("/");
     window.location.reload();
   };
-  console.log(messages);
+  console.log(discussion);
   useEffect(() => {
     setDiscussion(
       messages.filter(
-        (msg) => msg.socketReceiver === localStorage.getItem("receiver")
+        (msg) =>
+          (msg.name === localStorage.getItem("userName") &&
+            msg.receiverName === localStorage.getItem("receiverName")) ||
+          (msg.receiverName === localStorage.getItem("userName") &&
+          msg.name === localStorage.getItem("receiverName"))
       )
     );
-  }, [receiver]);
+  }, [receiver, messages]);
 
   return (
     <>

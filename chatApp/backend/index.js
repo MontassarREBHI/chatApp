@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./db");
 const userController = require("./controllers/user");
+const messageController =require("./controllers/message")
 const User = require("./models/user");
 const app = express();
 connectDB();
@@ -52,6 +53,7 @@ app.put("/login", async (req, res) => {
       });
   }
 });
+app.post('/message',messageController.createMessage)
 io.on("connection", async (socket) => {
   console.log("⚡ a user connected", socket.id);
 
