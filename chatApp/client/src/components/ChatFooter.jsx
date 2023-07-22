@@ -1,31 +1,31 @@
 /* eslint-disable react/prop-types */
-import  { useState,useEffect } from 'react';
-import checkPageStatus from "../utils/functions"
+import { useState, useEffect } from "react";
+import checkPageStatus from "../utils/functions";
 
-const ChatFooter = ({socket,setTypingStatus}) => {
-  const [message, setMessage] = useState('');
-  
-  useEffect(()=>{
+const ChatFooter = ({ socket, setTypingStatus }) => {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
     checkPageStatus(message, localStorage.getItem("userName"));
-  },[message])
+  }, [message]);
   const handleTyping = () =>
-  socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
+    socket.emit("typing", `${localStorage.getItem("userName")} is typing`);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (message.trim() && localStorage.getItem('userName')) {
-      const data={
+    if (message.trim() && localStorage.getItem("userName")) {
+      const data = {
         text: message,
-        name: localStorage.getItem('userName'),
+        name: localStorage.getItem("userName"),
         id: `${socket.id}${Math.random()}`,
         socketId: socket.id,
-        socketReceiver:localStorage.getItem("receiver")
-      }
-      socket.emit('message', data)
-      
+        socketReceiver: localStorage.getItem("receiver"),
+      };
+
+      socket.emit("message", data);
       checkPageStatus(message, localStorage.getItem("userName"));
     }
-    setMessage('');
+    setMessage("");
   };
   return (
     <div className="chat__footer">
@@ -37,7 +37,7 @@ const ChatFooter = ({socket,setTypingStatus}) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleTyping}
-          onKeyUp={()=>setTypingStatus("")}
+          onKeyUp={() => setTypingStatus("")}
         />
         <button className="sendBtn">SEND</button>
       </form>
