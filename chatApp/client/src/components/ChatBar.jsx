@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 const ChatBar = ({ socket, notification, setReceiver }) => {
   const [users, setUsers] = useState([]);
-
   useEffect(() => {
     socket.on("newUserResponse", (data) => {
       setUsers(data);
@@ -31,10 +30,9 @@ const ChatBar = ({ socket, notification, setReceiver }) => {
                 }}
               >
                 {user.username}
-                {notification.find(
-                  (e) =>
-                    e.name === user.username 
-                ) && <span>🔥</span>}
+                {notification.find((e) => e.name === user.username) && (
+                  <span>🔥</span>
+                )}
               </p>
             ))}
         </div>
