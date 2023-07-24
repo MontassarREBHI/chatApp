@@ -16,19 +16,27 @@ const ChatBar = ({ socket, notification, setReceiver }) => {
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
-          {users?.map((user) => (
-            <p
-              style={{ cursor: "pointer" }}
-              key={user.socketId}
-              onClick={() => {
-                localStorage.setItem("receiver", user.socketId);
-                setReceiver(localStorage.getItem("receiver"));
-              }}
-            >
-              {user.username}::
-              {notification.find((e) => e.name === user.username)?.count}
-            </p>
-          ))}
+          {users
+            ?.filter(
+              (user) => user.username !== localStorage.getItem("userName")
+            )
+            .map((user) => (
+              <p
+                style={{ cursor: "pointer" }}
+                key={user.socketId}
+                onClick={() => {
+                  localStorage.setItem("receiver", user.socketId);
+                  localStorage.setItem("receiverName", user.username);
+                  setReceiver(localStorage.getItem("receiver"));
+                }}
+              >
+                {user.username}
+                {notification.find(
+                  (e) =>
+                    e.name === user.username 
+                ) && <span>🔥</span>}
+              </p>
+            ))}
         </div>
       </div>
     </div>
