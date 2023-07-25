@@ -7,10 +7,12 @@ import ChatFooter from "./ChatFooter";
 
 const ChatPage = ({ socket }) => {
   const [messages, setMessages] = useState([]);
+  const [messageHistory,setMesageHistory]=useState([])
   const [typingStatus, setTypingStatus] = useState("");
   const [notification, setNotification] = useState([]);
   const lastMessageRef = useRef(null);
   const [receiver, setReceiver] = useState(localStorage.getItem("receiver"));
+ 
   useEffect(() => {
     socket.on("messageResponse", (data) => {
       setMessages([...messages, data]);
@@ -29,7 +31,8 @@ const ChatPage = ({ socket }) => {
         }
       });
     });
-  }, [messages]);
+  }, [socket,messages]);
+  
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,6 +40,7 @@ const ChatPage = ({ socket }) => {
   }, [messages]);
   useEffect(() => {
     socket.on("typingResponse", (data) => setTypingStatus(data));
+   axios.get().then((res)=>setMesageHistory(res.data))
   }, [socket]);
 
   return (
@@ -45,6 +49,7 @@ const ChatPage = ({ socket }) => {
         socket={socket}
         notification={notification}
         setReceiver={setReceiver}
+        
       />
       <div className="chat__main">
         <ChatBody

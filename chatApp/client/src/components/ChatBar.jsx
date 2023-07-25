@@ -27,6 +27,7 @@ const ChatBar = ({ socket, notification, setReceiver }) => {
                   localStorage.setItem("receiver", user.socketId);
                   localStorage.setItem("receiverName", user.username);
                   setReceiver(localStorage.getItem("receiver"));
+
                 }}
               >
                 {user.username}

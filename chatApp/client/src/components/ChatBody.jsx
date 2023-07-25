@@ -5,13 +5,8 @@ import { useEffect, useState } from "react";
 const ChatBody = ({ messages, lastMessageRef, typingStatus, receiver }) => {
   const navigate = useNavigate();
   const [discussion, setDiscussion] = useState([]);
-  const handleLeaveChat = () => {
-    localStorage.removeItem("userName");
-    localStorage.removeItem("receiverName");
-    localStorage.removeItem("receiver");
-    navigate("/");
-    window.location.reload();
-  };
+  const [messageHistory,setMesageHistory]=useState([])
+ 
   console.log(discussion);
   useEffect(() => {
     setDiscussion(
@@ -24,7 +19,16 @@ const ChatBody = ({ messages, lastMessageRef, typingStatus, receiver }) => {
       )
     );
   }, [receiver, messages]);
-
+  useEffect(()=>{
+   
+  },[])
+  const handleLeaveChat = () => {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("receiverName");
+    localStorage.removeItem("receiver");
+    navigate("/");
+    window.location.reload();
+  };
   return (
     <>
       <header className="chat__mainHeader">
@@ -36,6 +40,7 @@ const ChatBody = ({ messages, lastMessageRef, typingStatus, receiver }) => {
 
       {/*This shows messages sent from you*/}
       <div className="message__container">
+        
         {discussion.map((message) =>
           message.name === localStorage.getItem("userName") ? (
             <div className="message__chats" key={message.id}>
