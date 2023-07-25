@@ -1,8 +1,9 @@
 const express = require("express");
 const connectDB = require("./db");
 const userController = require("./controllers/user");
-const messageController =require("./controllers/message")
+const messageController = require("./controllers/message");
 const User = require("./models/user");
+const Message = require("./models/message");
 const app = express();
 connectDB();
 const http = require("http");
@@ -37,7 +38,7 @@ app.put("/login", async (req, res) => {
     res.status(200).send("user already exisit");
   } else {
     const newUser = new User({ username, socketId, connected: true });
-
+    console.log(newUser);
     newUser
       .save()
       .then(async () => {
@@ -53,13 +54,14 @@ app.put("/login", async (req, res) => {
       });
   }
 });
-app.post('/message',messageController.createMessage)
+app.post("/message", messageController.createMessage);
 io.on("connection", async (socket) => {
   console.log("⚡ a user connected", socket.id);
 
   //message event
-  socket.on("message", (data) => {
-    console.log(data.socketReceiver);
+  socket.on("message", async (data) => {
+    const newMessage = new Message(data);
+    newMessage.save();
     data.socketReceiver
       ? io
           .to(data.socketReceiver)

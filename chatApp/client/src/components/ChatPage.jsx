@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import axios from 'axios'
+import axios from "axios";
 import ChatBar from "./ChatBar";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
@@ -14,7 +14,6 @@ const ChatPage = ({ socket }) => {
   useEffect(() => {
     socket.on("messageResponse", (data) => {
       setMessages([...messages, data]);
-      axios.post('http://localhost:3000/message',data)
       setNotification((prevNotifications) => {
         const sender = prevNotifications.find((e) => e.name === data.name);
         if (sender) {
@@ -30,10 +29,11 @@ const ChatPage = ({ socket }) => {
         }
       });
     });
-  }, [messages, socket]);
+  }, [messages]);
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    //   axios.post("http://localhost:3000/message", messages[messages.length - 1]);
   }, [messages]);
   useEffect(() => {
     socket.on("typingResponse", (data) => setTypingStatus(data));

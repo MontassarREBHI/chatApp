@@ -2,13 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-const ChatBody = ({
-  messages,
-  lastMessageRef,
-  typingStatus,
-  
-  receiver,
-}) => {
+const ChatBody = ({ messages, lastMessageRef, typingStatus, receiver }) => {
   const navigate = useNavigate();
   const [discussion, setDiscussion] = useState([]);
   const handleLeaveChat = () => {
@@ -26,7 +20,7 @@ const ChatBody = ({
           (msg.name === localStorage.getItem("userName") &&
             msg.receiverName === localStorage.getItem("receiverName")) ||
           (msg.receiverName === localStorage.getItem("userName") &&
-          msg.name === localStorage.getItem("receiverName"))
+            msg.name === localStorage.getItem("receiverName"))
       )
     );
   }, [receiver, messages]);
