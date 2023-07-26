@@ -54,8 +54,8 @@ app.put("/login", async (req, res) => {
       });
   }
 });
-app.post("/message", messageController.createMessage)
-app.get("/message/:userName/:receiverName",messageController.getMyMessages)
+app.post("/message", messageController.createMessage);
+app.get("/message/:userName/:receiverName", messageController.getMyMessages);
 
 io.on("connection", async (socket) => {
   console.log("⚡ a user connected", socket.id);
@@ -96,5 +96,3 @@ io.on("connection", async (socket) => {
 server.listen(3000, () => {
   console.log("server is listenning on port 3000");
 });
-
-

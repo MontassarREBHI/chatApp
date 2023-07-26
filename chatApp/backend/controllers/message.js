@@ -20,12 +20,12 @@ const getMyMessages = async (req, res) => {
     $or: [
       { name: userName, receiverName: receiverName },
       { name: receiverName, receiverName: userName },
-    ] }).exec();
-  
+    ],
+  }).exec();
 
-  myMessage.length 
+  myMessage.length
     ? res.status(200).json({ myMessage, message: "here is the discussion" })
     : res.status(400).send("no messages found!");
 };
 
-module.exports = { createMessage,getMyMessages };
+module.exports = { createMessage, getMyMessages };
