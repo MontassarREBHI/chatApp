@@ -4,47 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 const ChatBody = ({
-  messages,
+  
   lastMessageRef,
   typingStatus,
   receiver,
   socket,
 }) => {
   const navigate = useNavigate();
-  const [discussion, setDiscussion] = useState([]);
+  
   const [messageHistory, setMessageHistory] = useState([]);
+ 
+//   useEffect(()=>{
+//   setMessageHistory([])
+//  },[receiver])
+ 
+ useEffect(()=>{
+  socket.on("updatedMessages",(data)=>{
+    setMessageHistory(data)
 
-  useEffect(() => {
-    setDiscussion(
-      messages.filter(
-        (msg) =>
-          (msg.name === localStorage.getItem("userName") &&
-            msg.receiverName === localStorage.getItem("receiverName")) ||
-          (msg.receiverName === localStorage.getItem("userName") &&
-            msg.name === localStorage.getItem("receiverName"))
-      )
-    );
-  }, [receiver, messages]);
-  useEffect(() => {
-    if (
-      localStorage.getItem("userName") &&
-      localStorage.getItem("receiverName")
-    ) {
-      axios
-        .get(
-          `http://localhost:3000/message/${localStorage.getItem(
-            "userName"
-          )}/${localStorage.getItem("receiverName")}`
-        )
-        .then((res) => {
-          res.status === setMessageHistory(res.data.myMessage);
-        })
-        .catch((err) => console.log(err.message));
-      socket.on("messageResponse", (data) => {
-        setMessageHistory((prev) => [...prev, data]);
-      });
-    }
-  }, [receiver, socket]);
+  })
+  
+ },[socket])
+  // useEffect(() => {
+    
+  //   if (
+  //     localStorage.getItem("userName") &&
+  //     localStorage.getItem("receiverName")
+  //   ) {
+  //     axios
+  //       .get(
+  //         `http://localhost:3000/message/${localStorage.getItem(
+  //           "userName"
+  //         )}/${localStorage.getItem("receiverName")}`
+  //       )
+  //       .then((res) => {
+  //          setMessageHistory(res.data.myMessage);
+  //       }) 
+  //   }
+  //   socket.on("messageResponse",(data)=>{ setMessageHistory((prev) => [...prev,data])})
+    
+  // }, [receiver]);
+  console.log(messageHistory)
   const handleLeaveChat = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("receiverName");
@@ -52,7 +52,7 @@ const ChatBody = ({
     navigate("/");
     window.location.reload();
   };
-  console.log(messageHistory);
+ 
   return (
     <>
       <header className="chat__mainHeader">

@@ -63,8 +63,18 @@ io.on("connection", async (socket) => {
   //message event
   socket.on("message", async (data) => {
     const newMessage = new Message(data);
-    newMessage.save();
-    data.socketReceiver
+   await  newMessage.save()
+   const currentMessages= await Message.find({
+    $or: [
+      { name: data.name, receiverName: data.receiverName },
+      { name: data.receiverName, receiverName: data.name },
+    ],
+  }).exec()
+  io
+  .to(data.socketReceiver)
+  .to(data.socketId).emit('updatedMessages',currentMessages)
+    
+   data.socketReceiver
       ? io
           .to(data.socketReceiver)
           .to(data.socketId)

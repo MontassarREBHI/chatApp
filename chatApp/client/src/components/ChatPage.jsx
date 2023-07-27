@@ -6,8 +6,7 @@ import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
 
 const ChatPage = ({ socket }) => {
-  const [messages, setMessages] = useState([]);
-  const [messageHistory, setMesageHistory] = useState([]);
+  
   const [typingStatus, setTypingStatus] = useState("");
   const [notification, setNotification] = useState([]);
   const lastMessageRef = useRef(null);
@@ -15,7 +14,7 @@ const ChatPage = ({ socket }) => {
 
   useEffect(() => {
     socket.on("messageResponse", (data) => {
-      setMessages([...messages, data]);
+     
       setNotification((prevNotifications) => {
         const sender = prevNotifications.find((e) => e.name === data.name);
         if (sender) {
@@ -31,13 +30,13 @@ const ChatPage = ({ socket }) => {
         }
       });
     });
-  }, [socket, messages]);
+  }, [socket]);
 
-  useEffect(() => {
-    // 👇️ scroll to bottom every time messages change
-    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
-    //   axios.post("http://localhost:3000/message", messages[messages.length - 1]);
-  }, [messages]);
+  // useEffect(() => {
+  //   // 👇️ scroll to bottom every time messages change
+  //   lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+  //   //   axios.post("http://localhost:3000/message", messages[messages.length - 1]);
+  // }, [messages]);
   useEffect(() => {
     socket.on("typingResponse", (data) => setTypingStatus(data));
   }, [socket]);
@@ -52,7 +51,7 @@ const ChatPage = ({ socket }) => {
       <div className="chat__main">
         <ChatBody
           receiver={receiver}
-          messages={messages}
+        
           socket={socket}
           lastMessageRef={lastMessageRef}
           typingStatus={typingStatus}
