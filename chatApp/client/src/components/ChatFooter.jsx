@@ -20,6 +20,7 @@ const ChatFooter = ({ socket, setTypingStatus }) => {
         socketId: socket.id,
         socketReceiver: localStorage.getItem("receiver"),
         receiverName: localStorage.getItem("receiverName"),
+        added: false,
       };
 
       socket.emit("message", data);

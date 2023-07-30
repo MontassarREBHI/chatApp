@@ -63,23 +63,15 @@ io.on("connection", async (socket) => {
   //message event
   socket.on("message", async (data) => {
     const newMessage = new Message(data);
-   await  newMessage.save()
-   const currentMessages= await Message.find({
-    $or: [
-      { name: data.name, receiverName: data.receiverName },
-      { name: data.receiverName, receiverName: data.name },
-    ],
-  }).exec()
-  io
-  .to(data.socketReceiver)
-  .to(data.socketId).emit('updatedMessages',currentMessages)
-    
-   data.socketReceiver
-      ? io
+    newMessage.save();
+   if(data.socketReceiver) 
+      { io
           .to(data.socketReceiver)
           .to(data.socketId)
           .emit("messageResponse", data)
-      : io.emit("messageResponse", data);
+        io.to(data.socketReceiver).emit("notification", {name:data.name,receiverName:data.receiverName}) }
+      else  io.emit("messageResponse", data);
+
   });
 
   // newUser event
