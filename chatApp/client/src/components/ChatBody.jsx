@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import ScrollToBottom from "react-scroll-to-bottom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -59,28 +59,31 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
       </header>
 
       {/*This shows messages sent from you*/}
+
       <div className="message__container">
-        {discussion?.map((message) =>
-          message.name === localStorage.getItem("userName") ? (
-            <div className="message__chats" key={message._id}>
-              <p className="sender__name">You</p>
-              <div className="message__sender">
-                <p ref={lastMessageRef}>{message.text}</p>
+        <ScrollToBottom>
+          {discussion?.map((message) =>
+            message.name === localStorage.getItem("userName") ? (
+              <div className="message__chats" key={message._id}>
+                <p className="sender__name">You</p>
+                <div className="message__sender">
+                  <p ref={lastMessageRef}>{message.text}</p>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="message__chats" key={message._id}>
-              <p>{message.name}</p>
-              <div className="message__recipient">
-                <p ref={lastMessageRef}>{message.text}</p>
+            ) : (
+              <div className="message__chats" key={message._id}>
+                <p>{message.name}</p>
+                <div className="message__recipient">
+                  <p ref={lastMessageRef}>{message.text}</p>
+                </div>
               </div>
-            </div>
-          )
-        )}
-        <div className="message__status">
-          <p>{typingStatus}</p>
-        </div>
-        <div />
+            )
+          )}
+          <div className="message__status">
+            <p>{typingStatus}</p>
+          </div>
+          <div />
+        </ScrollToBottom>
       </div>
     </>
   );
