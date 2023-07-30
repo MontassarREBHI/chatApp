@@ -1,8 +1,10 @@
+
 /* eslint-disable react/prop-types */
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ScrollToBottom from 'react-scroll-to-bottom';
 const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
   const navigate = useNavigate();
   const [discussion, setDiscussion] = useState([]);
@@ -51,6 +53,7 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
 
   return (
     <>
+
       <header className="chat__mainHeader">
         <p>Hangout with Colleagues </p>
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
@@ -60,6 +63,7 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
 
       {/*This shows messages sent from you*/}
       <div className="message__container">
+      <ScrollToBottom >
         {discussion?.map((message) =>
           message.name === localStorage.getItem("userName") ? (
             <div className="message__chats" key={message._id}>
@@ -81,9 +85,11 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
           <p>{typingStatus}</p>
         </div>
         <div />
+        </ScrollToBottom>
       </div>
     </>
   );
 };
 
 export default ChatBody;
+

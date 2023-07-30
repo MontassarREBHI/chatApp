@@ -64,12 +64,14 @@ io.on("connection", async (socket) => {
   socket.on("message", async (data) => {
     const newMessage = new Message(data);
     newMessage.save();
-    data.socketReceiver
-      ? io
+   if(data.socketReceiver) 
+      { io
           .to(data.socketReceiver)
           .to(data.socketId)
           .emit("messageResponse", data)
-      : io.emit("messageResponse", data);
+        io.to(data.socketReceiver).emit("notification", {name:data.name,receiverName:data.receiverName}) }
+      else  io.emit("messageResponse", data);
+
   });
 
   // newUser event

@@ -4,20 +4,30 @@ import { useState, useEffect } from "react";
 const ChatBar = ({ socket, setReceiver }) => {
   const [users, setUsers] = useState([]);
 
+
   useEffect(() => {
     socket.on("newUserResponse", (data) => {
       const newData = data.map((e) => {
         e.selected = false;
+        
         return e;
       });
       setUsers(newData);
     });
+    socket.on("notification",(data)=>{
+      if(data.name!==localStorage.getItem("receiver")){
+       const targetUser = users.find(user=>user.username===data.name)
+       targetUser.notification ? targetUser.notification+=1 : targetUser.notification = 1
+       setUsers(prev=> prev.map(e =>{
+         return e.username===targetUser.username ? targetUser:e
+      
+       }))
+      }
+      
+      })
   }, [socket]);
   console.log(users);
-  const userStyle = {
-    cursor: "pointer",
-    backgroundColor: "#008000",
-  };
+  
   return (
     <div className="chat__sidebar">
       <h2>Open Chat</h2>
@@ -31,7 +41,8 @@ const ChatBar = ({ socket, setReceiver }) => {
             )
             .map((user) => (
               <p
-                style={user.selected ? { userStyle } : { cursor: "pointer" }}
+                style={user.selected ? { cursor: "pointer",
+                backgroundColor: "#90EE90", } : { cursor: "pointer" }}
                 key={user.socketId}
                 onClick={() => {
                   localStorage.setItem("receiver", user.socketId);
@@ -48,7 +59,7 @@ const ChatBar = ({ socket, setReceiver }) => {
                   });
                 }}
               >
-                {user.username}
+                {user.username} : {user?.notification}
               </p>
             ))}
         </div>
