@@ -1,10 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 
-const ChatBar = ({ socket, setReceiver }) => {
+const ChatBar = ({ socket, setReceiver, receiver }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
+    setUsers((prev) => {
+      return prev.map((e) => {
+        if (e.username === localStorage.getItem("receiverName")) {
+          return { ...e, selected: true, notification: 0 };
+        } else {
+          return { ...e, selected: false };
+        }
+      });
+    });
+  }, [receiver]);
+  useEffect(() => {
+    // Event listener for the first event
     socket.on("newUserResponse", (data) => {
       const newData = data.map((e) => {
         e.selected = false;
@@ -12,12 +26,31 @@ const ChatBar = ({ socket, setReceiver }) => {
       });
       setUsers(newData);
     });
-  }, [socket]);
+
+    // Event listener for the second event, will execute only if the users array is not empty
+    if (users.length > 0) {
+      socket.on("notification", (data) => {
+        console.log(users, "inside notification useEffect");
+        console.log(data);
+        if (data.name !== localStorage.getItem("receiverName")) {
+          const targetUser = users.find((user) => user.username === data.name);
+          console.log(targetUser);
+          targetUser?.notification
+            ? (targetUser.notification += 1)
+            : (targetUser.notification = 1);
+
+          setUsers((prev) =>
+            prev.map((user) =>
+              user.username === targetUser.username ? targetUser : user
+            )
+          );
+        }
+      });
+    }
+  }, [socket, users.length]);
+
   console.log(users);
-  const userStyle = {
-    cursor: "pointer",
-    backgroundColor: "#008000",
-  };
+
   return (
     <div className="chat__sidebar">
       <h2>Open Chat</h2>
@@ -31,7 +64,11 @@ const ChatBar = ({ socket, setReceiver }) => {
             )
             .map((user) => (
               <p
-                style={user.selected ? { userStyle } : { cursor: "pointer" }}
+                style={
+                  user.selected
+                    ? { cursor: "pointer", backgroundColor: "#90EE90" }
+                    : { cursor: "pointer" }
+                }
                 key={user.socketId}
                 onClick={() => {
                   localStorage.setItem("receiver", user.socketId);
@@ -48,7 +85,16 @@ const ChatBar = ({ socket, setReceiver }) => {
                   });
                 }}
               >
-                {user.username}
+                {user.username}{" "}
+                {!user.hasOwnProperty("notification") ||
+                user.notification === 0 ? (
+                  ""
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faBell} size="lg" />
+                    {user.notification}
+                  </>
+                )}
               </p>
             ))}
         </div>

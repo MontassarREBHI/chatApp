@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import ChatBar from "./ChatBar";
@@ -21,7 +20,7 @@ const ChatPage = ({ socket }) => {
 
   return (
     <div className="chat">
-      <ChatBar socket={socket} setReceiver={setReceiver} />
+      <ChatBar socket={socket} setReceiver={setReceiver} receiver={receiver} />
       <div className="chat__main">
         <ChatBody
           receiver={receiver}
