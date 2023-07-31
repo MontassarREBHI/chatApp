@@ -62,17 +62,24 @@ io.on("connection", async (socket) => {
 
   //message event
   socket.on("message", async (data) => {
-    const newMessage = new Message(data);
-    newMessage.save();
-    if (data.socketReceiver) {
-      io.to(data.socketReceiver)
-        .to(data.socketId)
-        .emit("messageResponse", data);
-      io.to(data.socketReceiver).emit("notification", {
-        name: data.name,
-        receiverName: data.receiverName,
-      });
-    } else io.emit("messageResponse", data);
+    try {
+      const newMessage = new Message(data);
+      await newMessage.save();
+  
+      if (data.socketReceiver) {
+        io.to(data.socketReceiver)
+          .to(data.socketId)
+          .emit("messageResponse", data);
+        io.to(data.socketReceiver).emit("notification", {
+          name: data.name,
+          receiverName: data.receiverName,
+        });
+      } else {
+        io.emit("messageResponse", data);
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
   });
 
   // newUser event

@@ -60,16 +60,16 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
       {/*This shows messages sent from you*/}
       <div className="message__container">
         <ScrollToBottom>
-          {discussion?.map((message) =>
+          {discussion?.map((message,i) =>
             message.name === localStorage.getItem("userName") ? (
-              <div className="message__chats" key={message._id}>
+              <div className="message__chats" key={i}>
                 <p className="sender__name">You</p>
                 <div className="message__sender">
                   <p ref={lastMessageRef}>{message.text}</p>
                 </div>
               </div>
             ) : (
-              <div className="message__chats" key={message._id}>
+              <div className="message__chats" key={i}>
                 <p>{message.name}</p>
                 <div className="message__recipient">
                   <p ref={lastMessageRef}>{message.text}</p>
