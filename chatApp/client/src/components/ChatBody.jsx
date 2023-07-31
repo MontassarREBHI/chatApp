@@ -1,10 +1,7 @@
-
-/* eslint-disable react/prop-types */
-
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ScrollToBottom from 'react-scroll-to-bottom';
+import ScrollToBottom from "react-scroll-to-bottom";
 const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
   const navigate = useNavigate();
   const [discussion, setDiscussion] = useState([]);
@@ -53,7 +50,6 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
 
   return (
     <>
-
       <header className="chat__mainHeader">
         <p>Hangout with Colleagues </p>
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
@@ -63,28 +59,28 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
 
       {/*This shows messages sent from you*/}
       <div className="message__container">
-      <ScrollToBottom >
-        {discussion?.map((message) =>
-          message.name === localStorage.getItem("userName") ? (
-            <div className="message__chats" key={message._id}>
-              <p className="sender__name">You</p>
-              <div className="message__sender">
-                <p ref={lastMessageRef}>{message.text}</p>
+        <ScrollToBottom>
+          {discussion?.map((message) =>
+            message.name === localStorage.getItem("userName") ? (
+              <div className="message__chats" key={message._id}>
+                <p className="sender__name">You</p>
+                <div className="message__sender">
+                  <p ref={lastMessageRef}>{message.text}</p>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="message__chats" key={message._id}>
-              <p>{message.name}</p>
-              <div className="message__recipient">
-                <p ref={lastMessageRef}>{message.text}</p>
+            ) : (
+              <div className="message__chats" key={message._id}>
+                <p>{message.name}</p>
+                <div className="message__recipient">
+                  <p ref={lastMessageRef}>{message.text}</p>
+                </div>
               </div>
-            </div>
-          )
-        )}
-        <div className="message__status">
-          <p>{typingStatus}</p>
-        </div>
-        <div />
+            )
+          )}
+          <div className="message__status">
+            <p>{typingStatus}</p>
+          </div>
+          <div />
         </ScrollToBottom>
       </div>
     </>
@@ -92,4 +88,3 @@ const ChatBody = ({ lastMessageRef, typingStatus, receiver, socket }) => {
 };
 
 export default ChatBody;
-
