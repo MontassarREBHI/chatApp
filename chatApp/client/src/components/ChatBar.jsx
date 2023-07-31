@@ -25,7 +25,7 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
         return e;
       });
       setUsers(newData);
-    });
+    },[socket]);
 
     // Event listener for the second event, will execute only if the users array is not empty
     if (users.length > 0) {
@@ -47,9 +47,25 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
         }
       });
     }
-  }, [socket, users.length]);
+  }, [socket]);
 
-  console.log(users);
+ const handleClickUser=(user)=>{
+  localStorage.setItem("receiver", user.socketId);
+  localStorage.setItem("receiverName", user.username);
+  setReceiver(localStorage.getItem("receiver"));
+  setUsers((prev) => {
+    return prev.map((e) => {
+      if (e._id === user._id) {
+        const selectedUser=e
+              selectedUser.selected=true
+              selectedUser.notification=0
+        return selectedUser
+      } else {
+        return { ...e, selected: false };
+      }
+    });
+  });
+}
 
   return (
     <div className="chat__sidebar">
@@ -70,20 +86,7 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
                     : { cursor: "pointer" }
                 }
                 key={user.socketId}
-                onClick={() => {
-                  localStorage.setItem("receiver", user.socketId);
-                  localStorage.setItem("receiverName", user.username);
-                  setReceiver(localStorage.getItem("receiver"));
-                  setUsers((prev) => {
-                    return prev.map((e) => {
-                      if (e._id === user._id) {
-                        return { ...e, selected: true };
-                      } else {
-                        return { ...e, selected: false };
-                      }
-                    });
-                  });
-                }}
+                onClick={()=>handleClickUser(user)}
               >
                 {user.username}{" "}
                 {!user.hasOwnProperty("notification") ||
