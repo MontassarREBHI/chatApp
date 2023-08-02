@@ -6,17 +6,17 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 const ChatBar = ({ socket, setReceiver, receiver }) => {
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    setUsers((prev) => {
-      return prev.map((e) => {
-        if (e.username === localStorage.getItem("receiverName")) {
-          return { ...e, selected: true, notification: 0 };
-        } else {
-          return { ...e, selected: false };
-        }
-      });
-    });
-  }, [receiver]);
+  // useEffect(() => {
+  //   setUsers((prev) => {
+  //     return prev.map((e) => {
+  //       if (e.username === localStorage.getItem("receiverName")) {
+  //         return { ...e, selected: true, notification: 0 };
+  //       } else {
+  //         return { ...e, selected: false };
+  //       }
+  //     });
+  //   });
+  // }, [receiver]);
   useEffect(() => {
     // Event listener for the first event
     socket.on("newUserResponse", (data) => {
@@ -47,7 +47,7 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
         }
       });
     }
-  }, [socket]);
+  }, [socket,receiver]);
 
  const handleClickUser=(user)=>{
   localStorage.setItem("receiver", user.socketId);
