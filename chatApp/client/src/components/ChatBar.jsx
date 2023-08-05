@@ -5,26 +5,36 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 const ChatBar = ({ socket, setReceiver, receiver }) => {
   const [users, setUsers] = useState([]);
+  useEffect(() => {
+    users.length
+      ? setUsers((prev) => {
+          return prev.map((e) => {
+            e.notification = 0;
+            e.selected = false;
+            return e;
+          });
+        })
+      : null;
+  }, []);
 
   useEffect(() => {
     setUsers((prev) => {
       return prev.map((e) => {
-        if (e.username === localStorage.getItem("receiverName")) {
-          return { ...e, selected: true, notification: 0 };
+        if (e.selected) {
+          return { ...e, notification: 0 };
         } else {
-          return { ...e, selected: false };
+          return e;
         }
       });
     });
-  }, [receiver]);
-  useEffect(() => {
     // Event listener for the first event
     socket.on("newUserResponse", (data) => {
-      const newData = data.map((e) => {
-        e.selected = false;
-        return e;
+      const newUser = data.filter((e) => {
+        !users.find((user) => user.username === e.username);
       });
-      setUsers(newData);
+      newUser.notification = 0;
+      newUser.selected = false;
+      setUsers((prev) => [...prev, newUser]);
     });
 
     // Event listener for the second event, will execute only if the users array is not empty
@@ -32,12 +42,10 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
       socket.on("notification", (data) => {
         console.log(users, "inside notification useEffect");
         console.log(data);
-        if (data.name !== localStorage.getItem("receiverName")) {
+        if (data.name !== users.find((e) => e.selected)) {
           const targetUser = users.find((user) => user.username === data.name);
           console.log(targetUser);
-          targetUser?.notification
-            ? (targetUser.notification += 1)
-            : (targetUser.notification = 1);
+          targetUser.notification += 1;
 
           setUsers((prev) =>
             prev.map((user) =>
@@ -47,7 +55,7 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
         }
       });
     }
-  }, [socket, users.length]);
+  }, [socket]);
 
   console.log(users);
 
@@ -62,25 +70,25 @@ const ChatBar = ({ socket, setReceiver, receiver }) => {
             ?.filter(
               (user) => user.username !== localStorage.getItem("userName")
             )
-            .map((user) => (
+            .map((user, i) => (
               <p
                 style={
                   user.selected
                     ? { cursor: "pointer", backgroundColor: "#90EE90" }
                     : { cursor: "pointer" }
                 }
-                key={user.socketId}
+                key={i}
                 onClick={() => {
                   localStorage.setItem("receiver", user.socketId);
                   localStorage.setItem("receiverName", user.username);
                   setReceiver(localStorage.getItem("receiver"));
                   setUsers((prev) => {
                     return prev.map((e) => {
-                      if (e._id === user._id) {
-                        return { ...e, selected: true };
-                      } else {
-                        return { ...e, selected: false };
-                      }
+                      if (e.username === user.username) {
+                        e.selected = true;
+                        e.notification = 0;
+                        return e;
+                      } else return e;
                     });
                   });
                 }}

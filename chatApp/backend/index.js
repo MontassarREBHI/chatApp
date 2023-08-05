@@ -63,7 +63,7 @@ io.on("connection", async (socket) => {
   //message event
   socket.on("message", async (data) => {
     const newMessage = new Message(data);
-    newMessage.save();
+    await newMessage.save();
     if (data.socketReceiver) {
       io.to(data.socketReceiver)
         .to(data.socketId)
